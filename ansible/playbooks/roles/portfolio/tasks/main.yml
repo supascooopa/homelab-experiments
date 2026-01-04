@@ -1,0 +1,14 @@
+---
+- name: prepare portfolio application
+  block:
+    - name: check if www directory is available
+      stat:
+       path: ~/homelab_portfolio/www/html
+      register: stat_result
+    - name: if file doesn't exist pull from directory
+      copy:
+        src: ~/www/html/
+        dest: ~/homelab_portfolio/html/
+        mode: "0644"
+        remote_src: yes
+      when: not stat_result.stat.exists 

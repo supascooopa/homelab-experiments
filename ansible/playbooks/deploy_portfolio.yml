@@ -1,0 +1,20 @@
+---
+- name: Build and Deploy Portfolio
+  hosts: homelab
+  gather_facts: yes
+  roles:
+    - portfolio
+    - docker
+  tasks:
+  - name: Apply Terraform
+    terraform:
+      project_path: "{{ project_root }}"
+      state: present
+    become: yes 
+  - name: Get Terraform outputs
+    command: terraform output -json
+    args:
+      chdir: "{{ project_root }}"
+    register: tf_outputs
+    changed_when: false
+    become: yes 
